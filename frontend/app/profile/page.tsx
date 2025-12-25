@@ -62,7 +62,7 @@ const ProfilePage = () => {
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => router.push("/chat")}
-            className="p-3 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-700"
+            className="cursor-pointer p-3 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-700"
           >
             <ArrowLeft className="w-5 h-5 text-gray-300" />
           </button>
@@ -114,14 +114,14 @@ const ProfilePage = () => {
                     <div className="flex gap-3">
                       <button
                         type="submit"
-                        className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+                        className="cursor-pointer flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
                       >
                         <Save className="w-4 h-4" /> Save Changes
                       </button>
                       <button
                         type="button"
                         onClick={editHandler}
-                        className="flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg"
+                        className="cursor-pointer flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg"
                       >
                         Cancel
                       </button>
@@ -134,7 +134,7 @@ const ProfilePage = () => {
                     </span>
                     <button
                       onClick={editHandler}
-                      className="flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg"
+                      className="cursor-pointer flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg"
                     >
                       Edit
                     </button>

@@ -129,7 +129,7 @@ const VerifyOtp = () => {
         <div className="bg-gray-800 border border-gray-700 rounded-lg p-8">
           <div className="text-center mb-8 relative">
             <button
-              className="absolute top-0 left-0 p-2 text-gray-300 hover:text-white"
+              className="cursor-pointer absolute top-0 left-0 p-2 text-gray-300 hover:text-white"
               onClick={() => router.push("/login")}
             >
               <ChevronLeft className="w-6 h-6" />
@@ -176,7 +176,7 @@ const VerifyOtp = () => {
             )}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full cursor-pointer bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
               {loading ? (
@@ -203,7 +203,7 @@ const VerifyOtp = () => {
               </p>
             ) : (
               <button
-                className="text-blue-400 hover:text-blue-300 font-medium text-sm disabled:opacity-50"
+                className="text-blue-400 cursor-pointer hover:text-blue-300 font-medium text-sm disabled:opacity-50"
                 disabled={resendLoading}
                 onClick={handleResendOtp}
               >

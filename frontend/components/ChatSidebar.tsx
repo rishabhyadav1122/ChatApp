@@ -55,9 +55,9 @@ const ChatSidebar = ({
         <div className="sm:hidden flex justify-end mb-0">
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            className="cursor-pointer p-2 hover:bg-gray-700 rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-gray-300" />
+            <X className="cursor-pointer w-5 h-5 text-gray-300" />
           </button>
         </div>
 
@@ -72,7 +72,7 @@ const ChatSidebar = ({
           </div>
 
           <button
-            className={`p-2.5 rounded-lg transition-colors ${
+            className={`cursor-pointer p-2.5 rounded-lg transition-colors ${
               showAllUsers
                 ? "bg-red-600 hover:bg-red-700 text-white"
                 : "bg-green-600 hover:bg-green-700 text-white"
@@ -80,9 +80,9 @@ const ChatSidebar = ({
             onClick={() => setShowAllUsers((prev) => !prev)}
           >
             {showAllUsers ? (
-              <X className="w-4 h-4" />
+              <X className="cursor-pointer w-4 h-4" />
             ) : (
-              <Plus className="w-4 h-4" />
+              <Plus className="cursor-pointer w-4 h-4" />
             )}
           </button>
         </div>
@@ -93,11 +93,11 @@ const ChatSidebar = ({
         {showAllUsers ? (
           <div className="space-y-4 h-full">
             <div className="relative">
-              <Search className="absolute left-3  top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="cursor-pointer absolute left-3  top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search Users..."
-                className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
+                className=" w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -116,14 +116,14 @@ const ChatSidebar = ({
                 .map((u) => (
                   <button
                     key={u._id}
-                    className="w-full text-left p-4 rounded-lg border border-gray-700 hover:border-gray-600 hover:bg-gray-800 transition-colors"
+                    className=" w-full text-left p-4 rounded-lg border border-gray-700 hover:border-gray-600 hover:bg-gray-800 transition-colors"
                     onClick={() => createChat(u)}
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <UserCircle className="w-6 h-6 text-gray-300" />
                         {onlineUsers.includes(u._id) && (
-                          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900" />
+                          <span className=" absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900" />
                         )}
                       </div>
 
@@ -154,7 +154,7 @@ const ChatSidebar = ({
                     setSelectedUser(chat.chat._id);
                     setSidebarOpen(false);
                   }}
-                  className={`w-full text-left p-4 rounded-lg transition-colors ${
+                  className={`cursor-pointer w-full text-left p-4 rounded-lg transition-colors ${
                     isSelected
                       ? "bg-blue-600 border border-blue-500"
                       : "border border-gray-700 hover:border-gray-600"
@@ -239,10 +239,10 @@ const ChatSidebar = ({
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors text-red-500 hover:text-white"
         >
-          <div className="p-1.5 bg-red-600 rounded-lg">
-            <LogOut className="w-4 h-4 text-gray-300" />
+          <div className="cursor-pointer p-1.5 bg-red-600 rounded-lg">
+            <LogOut className=" cursor-pointer w-4 h-4 text-gray-300" />
           </div>
-          <span className="font-medium">Logout</span>
+          <span className="cursor-pointer font-medium">Logout</span>
         </button>
       </div>
     </aside>

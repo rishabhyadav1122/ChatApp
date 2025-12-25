@@ -42,7 +42,7 @@ const MessageInput = ({
           />
           <button
             type="button"
-            className="absolute -top-2 -right-2 bg-black rounded-full p-1"
+            className="cursor-pointer absolute -top-2 -right-2 bg-black rounded-full p-1"
             onClick={() => setImageFile(null)}
           >
             <X className="w-4 h-4 text-white" />
@@ -77,7 +77,7 @@ const MessageInput = ({
         <button
           type="submit"
           disabled={(!imageFile && !message) || isUploading}
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-white"
+          className="cursor-pointer bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-white"
         >
           {isUploading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
