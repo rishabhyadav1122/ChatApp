@@ -382,7 +382,7 @@ const ChatApp = () => {
         createChat={createChat}
         onlineUsers={onlineUsers}
       />
-      <div className="flex-1 flex flex-col justify-between p-4 backdrop-blur-xl bg-white/5 border-1 border-white/10">
+      <div className="flex-1 flex flex-col justify-between p-4 backdrop-blur-xl bg-white/5 border border-white/10">
         <ChatHeader
           user={user}
           setSidebarOpen={setSiderbarOpen}

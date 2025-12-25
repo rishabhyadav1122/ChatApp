@@ -180,7 +180,7 @@ const ChatSidebar = ({
                           {chat.user.name}
                         </span>
                         {unseenCount > 0 && (
-                          <div className="bg-red-600 text-white text-xs font-bold rounded-full min-w-[22px] h-5.5 flex items-center justify-center px-2">
+                          <div className="bg-red-600 text-white text-xs font-bold rounded-full min-w-5.5 h-5.5 flex items-center justify-center px-2">
                             {unseenCount > 99 ? "99+" : unseenCount}
                           </div>
                         )}
