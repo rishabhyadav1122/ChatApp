@@ -9,12 +9,12 @@ export const startSendOtpConsumer = async () => {
             hostname: process.env.Rabbitmq_Host,
             port: 5672,
             username: process.env.Rabbitmq_Username,
-            password: process.env.Rabbitmq_Password,
+            password: process.env.Rabbitmq_password,
         });
         const channel = await connection.createChannel();
         const queueName = "send-otp";
         await channel.assertQueue(queueName, { durable: true });
-        console.log("✅ Mail Service consumer started, listening for otp emails");
+        console.log(" Mail Service consumer started, listening for otp emails");
         channel.consume(queueName, async (msg) => {
             if (msg) {
                 try {
