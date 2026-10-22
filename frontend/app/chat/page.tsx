@@ -3,7 +3,7 @@ import ChatSidebar from "@/components/ChatSidebar";
 import Loading from "@/components/Loading";
 import { chat_service, useAppData, User } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -62,7 +62,8 @@ const ChatApp = () => {
 
   const handleLogout = () => logoutUser();
 
-  async function fetchChat() {
+  const fetchChat = useCallback(async () => {
+    if (!selectedUser) return;
     const token = Cookies.get("token");
     try {
       const { data } = await axios.get(
@@ -77,15 +78,14 @@ const ChatApp = () => {
       setMessages(data.messages);
       setUser(data.user);
       await fetchChats();
-    } catch (error) {
-      console.log(error);
+    } catch {
       toast.error("Failed to load messages");
     }
-  }
+  }, [fetchChats, selectedUser]);
 
-  const moveChatToTop = (
+  const moveChatToTop = useCallback((
     chatId: string,
-    newMessage: any,
+    newMessage: { text?: string; sender: string },
     updatedUnseenCount = true
   ) => {
     setChats((prev) => {
@@ -104,7 +104,7 @@ const ChatApp = () => {
           chat: {
             ...moveChat.chat,
             latestMessage: {
-              text: newMessage.text,
+              text: newMessage.text ?? "",
               sender: newMessage.sender,
             },
             updatedAt: new Date().toString(),
@@ -121,9 +121,9 @@ const ChatApp = () => {
 
       return updatedChats;
     });
-  };
+  }, [loggedInUser?._id, setChats]);
 
-  const resetUnseenCount = (chatId: string) => {
+  const resetUnseenCount = useCallback((chatId: string) => {
     setChats((prev) => {
       if (!prev) return null;
 
@@ -140,7 +140,7 @@ const ChatApp = () => {
         return chat;
       });
     });
-  };
+  }, [setChats]);
 
   async function createChat(u: User) {
     try {
@@ -161,17 +161,17 @@ const ChatApp = () => {
       setSelectedUser(data.chatId);
       setShowAllUser(false);
       await fetchChats();
-    } catch (error) {
+    } catch {
       toast.error("Failed to start chat");
     }
   }
 
-  const handleMessageSend = async (e: any, imageFile?: File | null) => {
+  const handleMessageSend = async (e: React.FormEvent<HTMLFormElement>, imageFile?: File | null): Promise<boolean> => {
     e.preventDefault();
 
-    if (!message.trim() && !imageFile) return;
+    if (!message.trim() && !imageFile) return false;
 
-    if (!selectedUser) return;
+    if (!selectedUser) return false;
 
     // socket work
     if (typingTimeOut) {
@@ -234,8 +234,13 @@ const ChatApp = () => {
         },
         false
       );
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+      return true;
+    } catch (error: unknown) {
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      toast.error(errorMessage || "Message could not be sent. Please try again.");
+      return false;
     }
   };
 
@@ -339,7 +344,7 @@ const ChatApp = () => {
       socket?.off("userTyping");
       socket?.off("userStoppedTyping");
     };
-  }, [socket, selectedUser, setChats, loggedInUser?._id]);
+  }, [socket, selectedUser, setChats, loggedInUser?._id, moveChatToTop]);
 
   useEffect(() => {
     if (selectedUser) {
@@ -355,7 +360,7 @@ const ChatApp = () => {
         setMessages(null);
       };
     }
-  }, [selectedUser, socket]);
+  }, [selectedUser, socket, fetchChat, resetUnseenCount]);
 
   useEffect(() => {
     return () => {
@@ -367,7 +372,7 @@ const ChatApp = () => {
 
   if (loading) return <Loading />;
   return (
-    <div className="min-h-screen flex bg-gray-900 text-white relative overflow-hidden">
+    <div className="chat-app-shell min-h-screen flex text-white relative overflow-hidden">
       <ChatSidebar
         sidebarOpen={siderbarOpen}
         setSidebarOpen={setSiderbarOpen}
@@ -382,7 +387,7 @@ const ChatApp = () => {
         createChat={createChat}
         onlineUsers={onlineUsers}
       />
-      <div className="flex-1 flex flex-col justify-between p-4 backdrop-blur-xl bg-white/5 border border-white/10">
+      <div className="chat-main-panel flex-1 flex flex-col justify-between p-4 backdrop-blur-xl">
         <ChatHeader
           user={user}
           setSidebarOpen={setSiderbarOpen}

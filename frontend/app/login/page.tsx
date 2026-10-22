@@ -18,17 +18,23 @@ const LoginPage = () => {
     e: React.FormEvent<HTMLElement>
   ): Promise<void> => {
     e.preventDefault();
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) return;
     setLoading(true);
 
     try {
-      const { data } = await axios.post(`${user_service}/api/v1/login`, {
-        email,
-      });
+      const { data } = await axios.post(
+        `${user_service}/api/v1/login`,
+        { email: normalizedEmail }
+      );
 
       toast.success(data.message);
-      router.push(`/verify?email=${email}`);
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+      router.push(`/verify?email=${encodeURIComponent(normalizedEmail)}`);
+    } catch (error: unknown) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      toast.error(message || "Could not send a verification code. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -37,12 +43,12 @@ const LoginPage = () => {
   if (userLoading) return <Loading />;
   if (isAuth) return redirect("/chat");
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+    <div className="auth-shell min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-8">
+        <div className="auth-card rounded-2xl p-8">
           <div className="text-center mb-8">
-            <div className="mx-auto w-20 h-20 bg-blue-600 rounded-lg flex items-center justify-center mb-6">
-              <Mail size={40} className="text-white" />
+            <div className="auth-brand-icon mx-auto w-20 h-20 rounded-2xl flex items-center justify-center mb-6">
+              <Mail size={36} className="text-white" />
             </div>
             <h1 className="text-4xl font-bold text-white mb-3">
               Welcome To ChatApp
@@ -63,7 +69,7 @@ const LoginPage = () => {
               <input
                 type="email"
                 id="email"
-                className="w-full px-4 py-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
+                className="auth-input w-full px-4 py-4 rounded-xl text-white placeholder-gray-400"
                 placeholder="Enter Your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -72,8 +78,8 @@ const LoginPage = () => {
             </div>
             <button
               type="submit"
-              className="w-full cursor-pointer bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={loading}
+              className="auth-submit w-full cursor-pointer text-white py-4 px-6 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading || !email.trim()}
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">

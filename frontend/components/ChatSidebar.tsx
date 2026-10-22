@@ -1,12 +1,12 @@
-import { User } from "@/context/AppContext";
+import { Chats, User } from "@/context/AppContext";
 import {
   CornerDownRight,
   CornerUpLeft,
-  Divide,
   LogOut,
   MessageCircle,
   Plus,
   Search,
+  Sparkles,
   UserCircle,
   X,
 } from "lucide-react";
@@ -20,7 +20,7 @@ interface ChatSidebarProps {
   setShowAllUsers: (show: boolean | ((prev: boolean) => boolean)) => void;
   users: User[] | null;
   loggedInUser: User | null;
-  chats: any[] | null;
+  chats: Chats[] | null;
   selectedUser: string | null;
   setSelectedUser: (userId: string | null) => void;
   handleLogout: () => void;
@@ -46,7 +46,7 @@ const ChatSidebar = ({
 
   return (
     <aside
-      className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-gray-900 border-r border-gray-700 transform ${
+      className={`chat-sidebar fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-gray-900 border-r border-gray-700 transform ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       } sm:translate-x-0 transition-transform duration-300 flex flex-col`}
     >
@@ -225,6 +225,16 @@ const ChatSidebar = ({
 
       {/* footer */}
       <div className="p-4 border-t border-gray-700 space-y-2">
+        <Link
+          href="/ai?new=1"
+          onClick={() => setSidebarOpen(false)}
+          className="ai-navigation-link"
+        >
+          <span className="ai-navigation-icon"><Sparkles className="w-4 h-4" /></span>
+          <span className="font-medium">AI Assistant</span>
+          <span className="ai-navigation-tag">NEW</span>
+        </Link>
+
         <Link
           href={"/profile"}
           className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors"

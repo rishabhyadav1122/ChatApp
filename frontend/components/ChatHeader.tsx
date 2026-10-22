@@ -29,7 +29,7 @@ const ChatHeader = ({
       </div>
 
       {/* chat header */}
-      <div className="mb-6 bg-gray-800 rounded-lg border border-gray-700 p-6">
+      <div className="chat-header-card mb-6 rounded-2xl p-5">
         <div className="flex items-center gap-4">
           {user ? (
             <>

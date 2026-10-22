@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 💬 ChatApp
 
 A **production-grade, microservices-based real-time chat application** built with **Next.js, Node.js, Socket.IO, RabbitMQ, Redis, MongoDB, and Cloudinary**.
@@ -243,3 +244,53 @@ During deployment, I worked through several real-world issues including:
 B.Tech CSE — IIIT Ranchi
 
 [GitHub](https://github.com/rishabhyadav1122) • [LinkedIn](https://www.linkedin.com/in/rishabh-yadav-40a288289/)
+=======
+# ChatApp
+
+ChatApp is a Next.js messaging frontend with separate user, chat, mail, and AI services.
+
+## Local development
+
+### Frontend
+
+1. Copy `frontend/.env.example` to `frontend/.env.local`.
+2. Adjust the user and chat service URLs if those services run somewhere other than ports 5000 and 5002.
+3. Start the frontend:
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+### AI service
+
+The AI service uses MongoDB for conversation history and the same JWT signing secret as the user service. Create `backend/ai/.env` from `backend/ai/.env.example`, then set:
+
+- `MONGO_URI`: the MongoDB connection string for the ChatApp database.
+- `JWT_SECRET`: the same secret used to sign login tokens in the user service.
+- `AI_PROVIDER=groq`, `GROQ_API_KEY`, and `AI_MODEL` for Groq.
+- `PORT`: the local port configured by `NEXT_PUBLIC_AI_SERVICE_URL` in the frontend.
+
+Start it with:
+
+```powershell
+cd backend/ai
+npm install
+npm run build
+npm test
+npm start
+```
+
+The service exposes `GET /health` and authenticated routes under `/api/v1/ai`.
+
+### User and chat services
+
+The frontend requires the user service for sign-in and the chat service for normal conversations. Start both using their own environment configuration before signing in. The AI feature shares the user service's JWT secret and uses the AI service's MongoDB configuration.
+
+## AI features
+
+- The message assistant can correct grammar, change tone, and translate a draft. Generated text is previewed and editable; only **Apply** changes the composer draft. It never sends a message.
+- The separate AI Assistant creates named, owner-scoped conversations, stores message history, supports retrying the latest answer, and can stop a pending generation.
+- AI conversations are stored separately from person-to-person chats.
+>>>>>>> 6b9e3ed (Add AI feature)

@@ -15,6 +15,7 @@ const VerifyOtp = () => {
     setUser,
     loading: userLoading,
     fetchChats,
+    fetchAiChats,
     fetchUsers,
   } = useAppData();
   const [loading, setLoading] = useState(false);
@@ -96,9 +97,14 @@ const VerifyOtp = () => {
       setUser(data.user);
       setIsAuth(true);
       fetchChats();
+      fetchAiChats();
       fetchUsers();
-    } catch (error: any) {
-      setError(error.response.data.message);
+    } catch (error: unknown) {
+      setError(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message || "Could not verify this code. Try again."
+          : "Could not verify this code. Try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -113,8 +119,12 @@ const VerifyOtp = () => {
       });
       toast.success(data.message);
       setTimer(60);
-    } catch (error: any) {
-      setError(error.response.data.message);
+    } catch (error: unknown) {
+      setError(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message || "Could not resend the code. Try again."
+          : "Could not resend the code. Try again."
+      );
     } finally {
       setResendLoading(false);
     }
@@ -124,9 +134,9 @@ const VerifyOtp = () => {
 
   if (isAuth) redirect("/chat");
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+    <div className="auth-shell min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-8">
+        <div className="auth-card rounded-2xl p-8">
           <div className="text-center mb-8 relative">
             <button
               className="cursor-pointer absolute top-0 left-0 p-2 text-gray-300 hover:text-white"
@@ -134,7 +144,7 @@ const VerifyOtp = () => {
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
-            <div className="mx-auto w-20 h-20 bg-blue-600 rounded-lg flex items-center justify-center mb-6">
+            <div className="auth-brand-icon mx-auto w-20 h-20 rounded-2xl flex items-center justify-center mb-6">
               <Lock size={40} className="text-white" />
             </div>
             <h1 className="text-4xl font-bold text-white mb-3">
@@ -164,7 +174,7 @@ const VerifyOtp = () => {
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={index === 0 ? handlePaste : undefined}
-                    className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-600 rounded-lg bg-gray-700 text-white"
+                    className="auth-otp-input w-12 h-12 text-center text-xl font-bold rounded-xl text-white"
                   />
                 ))}
               </div>
@@ -176,7 +186,7 @@ const VerifyOtp = () => {
             )}
             <button
               type="submit"
-              className="w-full cursor-pointer bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="auth-submit w-full cursor-pointer text-white py-4 px-6 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
               {loading ? (
@@ -195,7 +205,7 @@ const VerifyOtp = () => {
 
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm mb-4">
-              Din't receive the code?
+              Didn&apos;t receive the code?
             </p>
             {timer > 0 ? (
               <p className="text-gray-400 text-sm">

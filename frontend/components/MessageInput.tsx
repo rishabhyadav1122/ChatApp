@@ -1,11 +1,12 @@
-import { Loader2, Paperclip, Send, X } from "lucide-react";
-import React, { useState } from "react";
+import { Bot, Loader2, Paperclip, Send, X } from "lucide-react";
+import React, { FormEvent, useState } from "react";
+import AiModal from "@/components/AiModal";
 
 interface MessageInputProps {
   selectedUser: string | null;
   message: string;
   setMessage: (message: string) => void;
-  handleMessageSend: (e: any, imageFile?: File | null) => void;
+  handleMessageSend: (e: FormEvent<HTMLFormElement>, imageFile?: File | null) => Promise<boolean>;
 }
  
 const MessageInput = ({
@@ -16,23 +17,37 @@ const MessageInput = ({
 }: MessageInputProps) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [assistantOpen, setAssistantOpen] = useState(false);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!message.trim() && !imageFile) return;
 
     setIsUploading(true);
-    await handleMessageSend(e, imageFile);
-    setImageFile(null);
-    setIsUploading(false);
+    try {
+      const sent = await handleMessageSend(e, imageFile);
+      if (sent) setImageFile(null);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   if (!selectedUser) return null;
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-2 border-t border-gray-700 pt-2"
+      className="message-composer flex flex-col gap-2 border-t border-gray-700 pt-3"
     >
+      {assistantOpen && (
+        <AiModal
+          currentText={message}
+          onClose={() => setAssistantOpen(false)}
+          onApply={(text) => {
+            setMessage(text);
+            setAssistantOpen(false);
+          }}
+        />
+      )}
       {imageFile && (
         <div className="relative w-fit">
           <img
@@ -68,11 +83,23 @@ const MessageInput = ({
 
         <input
           type="text"
-          className="flex-1 bg-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-400"
+          className="message-composer-input flex-1 rounded-xl px-4 py-3 text-white placeholder-gray-400"
           placeholder={imageFile ? "Add a caption..." : "Type a message..."}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
+
+        <button
+          type="button"
+          onClick={() => setAssistantOpen(true)}
+          disabled={!message.trim() || isUploading}
+          aria-label="Improve message with AI"
+          title="Improve message with AI"
+          className="ai-composer-assist"
+        >
+          <Bot size={18} />
+          <span>AI</span>
+        </button>
 
         <button
           type="submit"

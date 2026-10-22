@@ -1,17 +1,12 @@
-// // import type { NextConfig } from "next";
+import type { NextConfig } from "next";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-// const nextConfig: NextConfig = {
-//   /* config options here */
-//   eslint:{
-//     ignoreDuringBuilds:true,
-//   },
-// };
+const frontendRoot = dirname(fileURLToPath(import.meta.url));
 
-// export default nextConfig;
-
-const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
+const nextConfig: NextConfig = {
+  turbopack: {
+    root: frontendRoot,
   },
 };
 

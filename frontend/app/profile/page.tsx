@@ -21,7 +21,7 @@ const ProfilePage = () => {
     setName(user?.name);
   };
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const token = Cookies.get("token");
     try {
@@ -44,8 +44,11 @@ const ProfilePage = () => {
       toast.success(data.message);
       setUser(data.user);
       setIsEdit(false);
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      toast.error(message || "Could not save your profile. Please try again.");
     }
   };
 
@@ -57,7 +60,7 @@ const ProfilePage = () => {
 
   if (loading) return <Loading />;
   return (
-    <div className="min-h-screen bg-gray-900 p-4">
+    <div className="settings-shell min-h-screen p-4">
       <div className="max-w-2xl mx-auto pt-8">
         <div className="flex items-center gap-4 mb-8">
           <button
@@ -74,7 +77,7 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <div className="bg-gray-800 rounded-lg border border-gray-700 shadow-lg">
+        <div className="settings-card rounded-2xl shadow-lg">
           <div className="bg-gray-700 p-8 border-b border-gray-600">
             <div className="flex items-center gap-6">
               <div className="relative">
